@@ -8,9 +8,9 @@
 
 **2. European Options: Call and Put**
 
-**3. Exotic Options**
+**3. American Options: Call and Put**
 
-**4. Asian**
+**4. Asian Options**
 
 **5. Barrier Options**
 
@@ -72,25 +72,9 @@ Assumption of the BS model includes:
 - constant volatility
 - log-normal asset price dynamics
 
-- Black–Scholes PDE for the option value $V(S,t)$:
+Black–Scholes PDE for the option value $V(S,t)$:
 
-$$
-\frac{\partial V}{\partial t}
-+ \tfrac12 \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}
-+ r S \frac{\partial V}{\partial S}
-- r V = 0.
-$$
-
-Terminal condition at maturity:
-$$
-V(S,T) = \max(S - K, 0).
-$$
-
-Discretize $S$ and $t$ on a grid and step backward in time (e.g., implicit FD), with suitable boundary conditions.  
-The numerical solution at $(S_0,0)$ gives
-$$
-C_0 \approx V(S_0,0),
-$$
+$\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + r S \frac{\partial V}{\partial S} - r V = 0$
 
 Closed form solution of the BS model is given by: 
 
@@ -148,13 +132,13 @@ Example graph of simulated stock paths:
 <img width="1148" height="670" alt="Simulation of Stock Paths by GBM Dynamics " src="https://github.com/user-attachments/assets/636b7575-41f9-4a12-9727-3352d7c3def6" />
 
 
-## 3. Exotic Options ## 
+## 3. American Options: Put and Call  ## 
 
 **Parameters** 
 
 **Exotic Options** 
 
-Exotic options are non-standard and complex financial derivatives with cutomized features. These contracts differ a lot from vanilla options (like the European options). Therofre, pricing exotic options require a more advanced models. 
+Exotic options are non-standard and complex financial derivatives with customized features. These contracts differ a lot from standard options, consequently needing more advanced models in order to accurately price them. 
 
 
 
