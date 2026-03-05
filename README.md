@@ -120,7 +120,7 @@ The model uses the GBM dynamics for Monte Carlo simulation of simulated stock pa
 
 - $N_{\text{Time}}$ — Number of time steps  
 
-- $N_{\text{Paths}}$ — Number of simulated paths  
+- $N_{\text{Paths}}$ — Number of Monte Carlo simulations
 
 - $T$ — Option's Maturity
 
