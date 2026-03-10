@@ -27,7 +27,8 @@ Current implementations:
 - GBM simulation for stock paths
 
 Currently working on: 
-- American options 
+- American options with Least Square Monte Carlo
+- GBM Process 
 
 Planned: 
 - Barrier
@@ -91,32 +92,13 @@ The future possible prices of a stock that follows the GBM model can be modelled
 $$S_{t+\Delta t} = S_t \cdot \exp\Big((r - q - \frac{1}{2}\sigma^2)\Delta t + \sigma \sqrt{\Delta t} Z_t \Big)$$
 
 
-**Model - european_options.py** 
-
-- $S_0$ - Initial Stock Price at Time $t=0$  
-
-- $K$ - Strike Price
-
-- $r$ — Risk Free Rate (countinous compounding)
-
-- $q$ - Dividend Yield 
-
-- $\sigma$ — Volatility (standard deviation of returns)  
-
-- $N_{\text{Time}}$ — Number of time steps  
-
-- $N_{\text{Paths}}$ — Number of Monte Carlo simulations
-
-- $T$ — Option's Maturity
-
-
 **Notes on the model**
 
-(1) Keeping 252 time steps so that it is more aligned with trading days. 
+(1) Keeping $N$ = 252 (time steps) so that it is more aligned with trading days or any $N$ for $N$ > 30 is standard. 
 
-(2) Having a larger number of paths simulated will more closly align with the theoritical expected stock price as well as put and call prices (typically > 50,000 simulations is good enough)
+(2) Having a larger number Monte Carlo simulations will more closly align with the theoritical expected stock price as well as put and call prices - typically $M$ > 50,000 simulations. 
 
-(3) Option maturity is measured in $T$ years. If an option matures in 120 days from now then write code 120/365, which let's Python calculate the option maturing in 120 days with 256 time steps. 
+(3) For the model to be more closely aligned with real financial option trade for the parameter $T$, instert the maturity of the option in datetime.date(). The code will then proceed to compute the option maturity in years and use for it further pricing computation. 
 
 
 ## 3. American Options: Put and Call  ## 
