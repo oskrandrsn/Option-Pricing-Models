@@ -10,6 +10,7 @@ from matplotlib.cm import ScalarMappable
 from scipy.stats import gaussian_kde
 from scipy.stats import norm as scipy_norm
 import math
+import datetime
 
 # ==========================================================
 # Model Parameters
@@ -17,19 +18,20 @@ import math
 
 def get_model_parameters():
     params = {
-        "S0": 40,
-        "K": 80,
-        "r": 0.05,
-        "q": 0.0,
-        "sigma": 0.30,
-        "T": 120/365,
-        "Number_Time_Steps": 256,
-        "Number_Paths": 5000,
+        "S0": 256.62,
+        "K": 95,
+        "r": 0.0355,
+        "q": 0.40,
+        "vol": 0.9233,
+        "N": 100,
+        "M": 50000,
         "seed": 5000
     }
     
-    params["dt"] = params["T"] / params["Number_Time_Steps"]
-    
+    params["T"] = ((datetime.date(2026,6,10) - datetime.date.today()).days)/365
+
+    params["dt"] = params["T"] / params["N"]
+
     return params
 
 # ==========================================================
@@ -41,10 +43,10 @@ def simulate_gbm_paths(params):
     S0 = params["S0"]
     r = params["r"]
     q = params["q"]
-    sigma = params["sigma"]
+    vol = params["vol"]
     dt = params["dt"]
-    steps = params["Number_Time_Steps"]
-    paths_n = params["Number_Paths"]
+    steps = params["N"]
+    paths_n = params["M"]
 
     rng = np.random.default_rng(params["seed"])
 
@@ -55,8 +57,7 @@ def simulate_gbm_paths(params):
         Z = rng.standard_normal(paths_n)
 
         paths[:, i] = paths[:, i-1] * np.exp(
-            (r - q - 0.5 * sigma**2) * dt +
-            sigma * np.sqrt(dt) * Z
+            (r - q - 0.5 * vol**2) * dt + vol * np.sqrt(dt) * Z
         )
 
     return paths
@@ -139,26 +140,26 @@ _norm_cdf = scipy_norm.cdf
 _norm_pdf = scipy_norm.pdf
 
 
-def d1_d2(S0,K,r,q,sigma,T):
+def d1_d2(S0,K,r,q,vol,T):
 
     sqrtT = math.sqrt(T)
 
-    d1 = (math.log(S0/K) + (r-q+0.5*sigma**2)*T) / (sigma*sqrtT)
-    d2 = d1 - sigma*sqrtT
+    d1 = (math.log(S0/K) + (r-q+0.5*vol**2)*T) / (vol*sqrtT)
+    d2 = d1 - vol*sqrtT
 
     return d1,d2
 
 
-def bs_call_price(S0,K,r,q,sigma,T):
+def bs_call_price(S0,K,r,q,vol,T):
 
-    d1,d2 = d1_d2(S0,K,r,q,sigma,T)
+    d1,d2 = d1_d2(S0,K,r,q,vol,T)
 
     return S0*math.exp(-q*T)*_norm_cdf(d1) - K*math.exp(-r*T)*_norm_cdf(d2)
 
 
-def bs_put_price(S0,K,r,q,sigma,T):
+def bs_put_price(S0,K,r,q,vol,T):
 
-    d1,d2 = d1_d2(S0,K,r,q,sigma,T)
+    d1,d2 = d1_d2(S0,K,r,q,vol,T)
 
     return K*math.exp(-r*T)*_norm_cdf(-d2) - S0*math.exp(-q*T)*_norm_cdf(-d1)
 
@@ -194,7 +195,7 @@ def print_results(params,final_prices,mc_results):
     K = params["K"]
     r = params["r"]
     q = params["q"]
-    sigma = params["sigma"]
+    vol = params["vol"]
     T = params["T"]
 
     mc_call,mc_put,se_call,se_put = mc_results
@@ -204,12 +205,12 @@ def print_results(params,final_prices,mc_results):
 
     print()
 
-    print("Black-Scholes Call:",bs_call_price(S0,K,r,q,sigma,T))
+    print("Black-Scholes Call:",bs_call_price(S0,K,r,q,vol,T))
     print("Monte Carlo Call:",mc_call,"SE:",se_call)
 
     print()
 
-    print("Black-Scholes Put:",bs_put_price(S0,K,r,q,sigma,T))
+    print("Black-Scholes Put:",bs_put_price(S0,K,r,q,vol,T))
     print("Monte Carlo Put:",mc_put,"SE:",se_put)
 
 # ==========================================================
@@ -217,7 +218,7 @@ def print_results(params,final_prices,mc_results):
 # ==========================================================
 
 def main():
-    
+
     params = get_model_parameters()
 
     paths = simulate_gbm_paths(params)
