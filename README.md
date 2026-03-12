@@ -137,9 +137,8 @@ $$
 The geometric average is given by: 
 
 $$
-G = \left(\prod_{i=1}^{n} S_{t_i}\right)^{\frac{1}{n}}
+\bar{S} = \left(\prod_{i=1}^{n} S_{t_i}\right)^{\frac{1}{n}}
 $$
-
 
 **Asian Options Prices**
 
