@@ -1,19 +1,5 @@
 # Option Pricing and 3D Volatility Visualizer (In Progress) 
 
-## Content ##
-
-**1. Overview** 
-
-**2. European Options: Call and Put**
-
-**3. American Options: Call and Put**
-
-**4. Asian Options**
-
-**5. Barrier Options**
-
-**6. Volatility Surface Visualizor 3D** 
-
 ## 1. Overview ## 
 
 This project explores option pricing with core objective to move beyond classical closed-form pricing methods and investigate more realistic models that better reflect the financial market and behavior. I began my implementing the famous Black-Scholes model for European pricing, using its analytical solution. The model is computationally efficient, but relies on perfect market conditions, consequently misaligning with how the real financial market behaves. Most notable incosistant assumptions are the constant volatility or log-normal asset dynamics, which may casue empirical problems like the volatility smile. 
